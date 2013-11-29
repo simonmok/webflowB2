@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow
+      http://www.springframework.org/schema/webflow/spring-webflow-2.4.xsd"
+      start-state="form">
+
+        <var name="survey" class="com.survey.Survey"/>
+
+		<view-state id="form" view="form.xhtml" model="survey">
+            <transition on="listSurvey" to="list"/>
+            <transition on="submitForm" to="success">
+                <evaluate expression="surveyService.saveSurvey(survey)"/>
+            </transition>
+        </view-state>
+
+		<action-state id="list">
+			<evaluate expression="surveyService.getSurveyList()" result="flowScope.surveyList"/>
+		    <transition to="listSurvey"/>
+        </action-state>
+        
+        <view-state id="listSurvey" view="list.xhtml">
+        	<transition on="newSurvey" to="form"/>
+        </view-state>
+        
+        <view-state id="success" view="success.xhtml">
+        	<transition on="newSurvey" to="form"/>
+        </view-state>
+        
+</flow>
